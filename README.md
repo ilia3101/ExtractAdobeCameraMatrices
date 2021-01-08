@@ -7,4 +7,4 @@ Dependencies:
 Instructions:
 1. Download latest DNG converter executable for Windows
 2. Run: `./extract.sh path_to_dng_converter.exe`
-3. Enjoy your matrices in the output file`camera_matrices.c`
+3. Enjoy your matrices in the output file `camera_matrices.c`
