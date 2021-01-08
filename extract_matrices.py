@@ -47,7 +47,10 @@ cameras = natsorted(cameras, key=lambda y: y[0].lower())
 ################ PRINT the C FILE #################
 
 print(
-"""typedef struct {
+"""
+/* ColorMatrix1 is for illuminant A (tungsten, 2856K)
+ * ColorMatrix2 is for illuminant D65 (daylight, 6504K) */
+typedef struct {
     char * CameraName;
     double ColorMatrix1[9];
     double ColorMatrix2[9];
