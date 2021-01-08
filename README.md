@@ -1,5 +1,4 @@
-# ExtractAdobeCameraMatrices
-Extract camera matrices from Adobe profiles
+## Extract camera matrices from Adobe profiles
 
 Dependencies:
 - `exifread` and `natsort` python libraries from pip
