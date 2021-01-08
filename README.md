@@ -11,4 +11,4 @@ This might be useful if you are making a raw converter or software that deals wi
 ### Instructions
 1. Download the latest [Adobe DNG Converter for Windows](https://www.adobe.com/go/dng_converter_win/)
 2. Run `./extract.sh path_to_downloaded_dng_converter.exe`
-3. Find the matrices in `camera_matrices.c`, which the script will have created
+3. Enjoy `camera_matrices.c`
