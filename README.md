@@ -9,6 +9,6 @@ This might be useful if you are making a raw converter or software that deals wi
 - `7z` command, provided by `p7zip-full` package on Ubuntu
 
 ### Instructions
-1. Download latest DNG converter executable for Windows
-2. Run: `./extract.sh path_to_dng_converter.exe`
-3. Enjoy your matrices in the output file `camera_matrices.c`
+1. Download the latest [Adobe DNG Converter for Windows](https://www.adobe.com/go/dng_converter_win/)
+2. Run `./extract.sh path_to_downloaded_dng_converter.exe`
+3. Find the matrices in `camera_matrices.c`, which the script will have created
