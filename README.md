@@ -2,7 +2,7 @@
 Extract camera matrices from Adobe profiles
 
 Dependencies:
-- `exifread` from pip
+- `exifread` and `natsort` python libraries from pip
 - `7z` command, provided by `p7zip-full` package on Ubuntu
 
 Instructions:
