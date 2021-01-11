@@ -1,7 +1,20 @@
-import exifread
 import sys
 import os
-from natsort import natsorted, ns
+
+try:
+    import exifread
+except ImportError:
+    print("\nExifread not installed. Install it with 'pip install exifread'")
+    exit()
+
+try:
+    from natsort import natsorted, ns
+except ImportError:
+    natsort_available = False
+    print("""\nNatsort module is not installed. It is not necessary, but orders the camera names nicer in the output file.
+You can install it with 'pip install natsort'""")
+else:
+    natsort_available = True
 
 def string_to_matrix(string):
     matrix = string.replace("[", "").replace("]", "").split(",")
@@ -41,10 +54,15 @@ for profile_file in profile_files:
             camera_info[2] != None and len(camera_info[1]) == 9):
             cameras.append(camera_info)
 
-# Natural sort. So that Canon 5D comes first :D
-cameras = natsorted(cameras, key=lambda y: y[0].lower())
+if (natsort_available):
+    # Natural sort. So that Canon 5D comes first :D
+    cameras = natsorted(cameras, key=lambda y: y[0].lower())
 
 ################ PRINT the C FILE #################
+
+#Hacky- change stdout to be file
+out_file = open('camera_matrices.c', 'w')
+sys.stdout = out_file
 
 print(
 """/* ColorMatrix1 is for illuminant A (tungsten, 2856K)
@@ -65,3 +83,5 @@ for camera_info in cameras:
     print("\t},")
 
 print("};")
+
+out_file.close
