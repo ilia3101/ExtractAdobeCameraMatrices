@@ -4,7 +4,7 @@ import os
 try:
     import exifread
 except ImportError:
-    print("\nExifread not installed. Install it with 'pip install exifread'")
+    print("\nExifread not installed. Install it with 'pip3 install exifread'")
     exit()
 
 try:
@@ -12,7 +12,7 @@ try:
 except ImportError:
     natsort_available = False
     print("""\nNatsort module is not installed. It is not necessary, but orders the camera names nicer in the output file.
-You can install it with 'pip install natsort'""")
+You can install it with 'pip3 install natsort'""")
 else:
     natsort_available = True
 
