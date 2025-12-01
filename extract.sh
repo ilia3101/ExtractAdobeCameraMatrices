@@ -1,6 +1,8 @@
 #!/bin/bash
 
 mkdir exefiles
-7z x $1 -y -oexefiles
-python3 extract_matrices.py 'exefiles/$APPDATA/Adobe/CameraRaw/CameraProfiles/Adobe Standard'
+cd exefiles
+innoextract $1
+cd ../
+python3 extract_matrices.py 'exefiles/commonappdata/Adobe/CameraRaw/CameraProfiles/Adobe Standard'
 rm -rf exefiles

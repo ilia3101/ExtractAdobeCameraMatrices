@@ -19,7 +19,7 @@ else:
 def string_to_matrix(string):
     matrix = string.replace("[", "").replace("]", "").split(",")
     for i in range (0,len(matrix)):
-        matrix[i] = str(eval(matrix[i]))
+        matrix[i] = '%.4f' % eval(matrix[i])
     return matrix
 
 def get_camera_matrices(filename):
@@ -41,6 +41,14 @@ def get_camera_matrices(filename):
 def print_matrix(matrix, end):
     print("\t\t{ " + ", ".join(matrix) + " }" + end)
 
+def print_matrix_rs(matrix, end):
+    mat_str = ("[" + "\n" +
+        "\t\t\t[" + ", ".join([x for x in matrix[0:3]]) + " ],\n" +
+        "\t\t\t[" + ", ".join([x for x in matrix[3:6]]) + " ],\n" +
+        "\t\t\t[" + ", ".join([x for x in matrix[6:9]]) + " ]\n" +
+        "\t\t]" + end)
+    print(mat_str)
+
 profile_dir = sys.argv[1]
 profile_files = sorted(os.listdir(profile_dir))
 
@@ -61,8 +69,10 @@ if (natsort_available):
 ################ PRINT the C FILE #################
 
 #Hacky- change stdout to be file
-out_file = open('camera_matrices.c', 'w')
-sys.stdout = out_file
+out_file_c = open('camera_matrices.c', 'w')
+out_file_rs = open('camera_matrices.rs', 'w')
+
+sys.stdout = out_file_c
 
 print(
 """/* ColorMatrix1 is for illuminant A (tungsten, 2856K)
@@ -77,11 +87,47 @@ CameraMatrixInfo_t all_camera_matrices[] = {""")
 
 for camera_info in cameras:
     print("\t{")
-    print ('\t\t"' + camera_info[0] + '",');
+    print ('\t\t"' + camera_info[0].replace("\"", "\\\"") + '",');
     print_matrix(camera_info[1], ",")
     print_matrix(camera_info[2], "")
     print("\t},")
 
 print("};")
 
-out_file.close
+out_file_c.close()
+
+sys.stdout = out_file_rs
+
+print(
+"""/* ColorMatrix1 is for illuminant A (tungsten, 2856K)
+ * ColorMatrix2 is for illuminant D65 (daylight, 6504K) */
+#[derive(Clone,Copy)]
+pub struct CameraMatrixInfo {
+    pub camera_name: &'static str,
+    pub color_matrix_1: [[f32; 3]; 3],
+    pub color_matrix_2: [[f32; 3]; 3]
+}
+
+pub fn get_matrix_for_camera_by_name(cam_name: &str) -> Option<&'static CameraMatrixInfo> {
+    for mat in ALL_CAMERA_MATRICES {
+        if mat.camera_name == cam_name {
+            return Some(mat)
+        }
+    }
+    None
+}
+
+pub const ALL_CAMERA_MATRICES: &'static [CameraMatrixInfo] = &[""")
+
+for camera_info in cameras:
+    print("\tCameraMatrixInfo {")
+    print ('\t\tcamera_name: "' + camera_info[0].replace("\"", "\\\"") + '",');
+    print("\t\tcolor_matrix_1: ", end="")
+    print_matrix_rs(camera_info[1], ",")
+    print("\t\tcolor_matrix_2: ", end="")
+    print_matrix_rs(camera_info[2], "")
+    print("\t},")
+
+print("];")
+
+out_file_rs.close()
